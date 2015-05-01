@@ -8,13 +8,12 @@
 #import "SLRESTAdapter.h"
 #import "SLStreamParam.h"
 
-#import "SLAFHTTPClient.h"
-#import "SLAFJSONRequestOperation.h"
+#import <AFNetworking/AFNetworking.h>
 
 static NSString * const DEFAULT_DEV_BASE_URL = @"http://localhost:3001";
 
 @interface SLRESTAdapter() {
-    SLAFHTTPClient *client;
+    AFHTTPRequestOperationManager *client;
 }
 
 @property (readwrite, nonatomic) BOOL connected;
@@ -52,14 +51,12 @@ static NSString * const DEFAULT_DEV_BASE_URL = @"http://localhost:3001";
         url = [url URLByAppendingPathComponent:@"/"];
     }
 
-    client = [SLAFHTTPClient clientWithBaseURL:url];
-    client.allowsInvalidSSLCertificate = self.allowsInvalidSSLCertificate;
+    client = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
+    client.securityPolicy.allowInvalidCertificates = self.allowsInvalidSSLCertificate;
 
     self.connected = YES;
 
-    client.parameterEncoding = AFJSONParameterEncoding;
-    [client registerHTTPOperationClass:[SLAFJSONRequestOperation class]];
-    [client setDefaultHeader:@"Accept" value:@"application/json"];
+    client.requestSerializer = [AFJSONRequestSerializer serializer];
 }
 
 - (void)invokeStaticMethod:(NSString *)method
@@ -145,57 +142,48 @@ static NSString * const DEFAULT_DEV_BASE_URL = @"http://localhost:3001";
 
     NSAssert(self.connected, SLAdapterNotConnectedErrorDescription);
 
-    if ([[verb uppercaseString] isEqualToString:@"GET"]) {
-        client.parameterEncoding = AFFormURLParameterEncoding;
-    } else {
-        client.parameterEncoding = AFJSONParameterEncoding;
-    }
-
     // Remove the leading / so that the path is treated as relative to the baseURL
     if ([path hasPrefix:@"/"]) {
         path = [path substringFromIndex:1];
     }
 
+    AFHTTPRequestSerializer *serializer = client.requestSerializer;
+    NSURL *URL = [NSURL URLWithString:path relativeToURL:client.baseURL];
+
     NSURLRequest *request;
 
     if (!multipart) {
-        request = [client requestWithMethod:verb path:path parameters:parameters];
+        request = [serializer requestWithMethod:verb URLString:URL.absoluteString parameters:parameters error:NULL];
     } else {
-        request = [client multipartFormRequestWithMethod:verb
-                                                    path:path
-                                              parameters:parameters
-                               constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
-                                   [self appendPartToMultiPartForm:formData
-                                                    withParameters:parameters];
-                               }];
+        request = [serializer multipartFormRequestWithMethod:verb
+                                                   URLString:URL.absoluteString
+                                                  parameters:parameters
+                                   constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
+                                       [self appendPartToMultiPartForm:formData
+                                                        withParameters:parameters];
+                                   } error:NULL];
     }
 
-    SLAFHTTPRequestOperation *operation;
+    AFHTTPRequestOperation *operation;
     // Synchronize the block so that the invocations of client's [un]registerHTTPOperationClass:
     // and HTTPRequestOperationWithRequest:success: methods become atomic.
     @synchronized(self) {
-        if (outputStream != nil) {
-            // The following is needed to force the received binary payload always go to the stream
-            [client unregisterHTTPOperationClass:[SLAFJSONRequestOperation class]];
-        }
-
         operation = [client HTTPRequestOperationWithRequest:request
-                                                    success:^(SLAFHTTPRequestOperation *operation,
+                                                    success:^(AFHTTPRequestOperation *operation,
                                                               id responseObject) {
             success(responseObject);
-        } failure:^(SLAFHTTPRequestOperation *operation, NSError *error) {
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             failure(error);
         }];
 
-        if (outputStream != nil) {
-            // Re-register the response handler class
-            [client registerHTTPOperationClass:[SLAFJSONRequestOperation class]];
-            
+        if (outputStream) {
+            // The following is needed to force the received binary payload always go to the stream
+            operation.responseSerializer = [AFHTTPResponseSerializer serializer];
             operation.outputStream = outputStream;
         }
     }
 
-    [client enqueueHTTPRequestOperation:operation];
+    [client.operationQueue addOperation:operation];
 }
 
 - (void)appendPartToMultiPartForm:(id <AFMultipartFormData>)formData
@@ -219,12 +207,12 @@ static NSString * const DEFAULT_DEV_BASE_URL = @"http://localhost:3001";
 
 - (NSString*)accessToken
 {
-    return [client defaultValueForHeader:@"Authorization"];
+    return [client.requestSerializer valueForHTTPHeaderField:@"Authorization"];
 }
 
 - (void)setAccessToken:(NSString *)accessToken
 {
-    [client setDefaultHeader:@"Authorization" value:accessToken];
+    [client.requestSerializer setValue:accessToken forHTTPHeaderField:@"Authorization"];
 }
 
 @end

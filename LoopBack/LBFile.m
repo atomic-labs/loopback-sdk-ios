@@ -8,6 +8,7 @@
 #import "LBFile.h"
 #import "LBRESTAdapter.h"
 #import "SLStreamParam.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 static NSString *mimeTypeForFileName(NSString *fileName) {
     CFStringRef pathExtension = (__bridge_retained CFStringRef)[fileName pathExtension];
