@@ -49,6 +49,8 @@
 		0B786866189B1C3300AB6782 /* LBFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B786865189B1C3300AB6782 /* LBFile.m */; };
 		0B8022DF18A2F1BA00AF845E /* LBContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 0B8022DE18A2F1BA00AF845E /* LBContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0B8022E518A2F27600AF845E /* LBContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B8022E418A2F27600AF845E /* LBContainer.m */; };
+		0BE0C4A61AF83865002D061A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B3D58E11AF42F3300B846F8 /* Security.framework */; };
+		0BE0C4A71AF83869002D061A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B3D58E31AF42F3800B846F8 /* CoreGraphics.framework */; };
 		4769FF09184D6F4F00E5152C /* LBInstallationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4769FF08184D6F4F00E5152C /* LBInstallationTests.m */; };
 		47AD031318491DA700F724C8 /* LBInstallation.m in Sources */ = {isa = PBXBuildFile; fileRef = 47AD031118491DA700F724C8 /* LBInstallation.m */; };
 		47AD031418491E2000F724C8 /* LBInstallation.h in Headers */ = {isa = PBXBuildFile; fileRef = 47AD031018491DA700F724C8 /* LBInstallation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -256,6 +258,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BE0C4A71AF83869002D061A /* CoreGraphics.framework in Frameworks */,
+				0BE0C4A61AF83865002D061A /* Security.framework in Frameworks */,
 				B3D2210A17722AE800B7CB63 /* SenTestingKit.framework in Frameworks */,
 				B3D2210D17722AE800B7CB63 /* Foundation.framework in Frameworks */,
 				895B41801AB16D660000A9D7 /* MobileCoreServices.framework in Frameworks */,
