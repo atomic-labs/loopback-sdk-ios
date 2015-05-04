@@ -69,6 +69,8 @@
 
             [dict setValue:[self valueForKey:propertyName] forKey:propertyName];
         }
+
+        free(properties);
     }
 
     return dict;
