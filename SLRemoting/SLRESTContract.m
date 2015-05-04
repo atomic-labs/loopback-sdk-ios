@@ -47,7 +47,7 @@ NSString *SLRESTContractDefaultVerb = @"POST";
 
 @interface SLRESTContract()
 
-@property (readwrite, nonatomic) NSDictionary *dict;
+@property (readwrite, nonatomic) NSMutableDictionary *dict;
 
 @end
 
@@ -121,13 +121,13 @@ NSString *SLRESTContractDefaultVerb = @"POST";
     NSParameterAssert(item);
     NSParameterAssert(method);
 
-    ((NSMutableDictionary *)self.dict)[method] = item;
+    self.dict[method] = item;
 }
 
 - (void)addItemsFromContract:(SLRESTContract *)contract {
     NSParameterAssert(contract);
 
-    [(NSMutableDictionary *)self.dict addEntriesFromDictionary:contract.dict];
+    [self.dict addEntriesFromDictionary:contract.dict];
 }
 
 - (NSString *)urlForMethod:(NSString *)method
@@ -146,17 +146,15 @@ NSString *SLRESTContractDefaultVerb = @"POST";
 - (NSString *)verbForMethod:(NSString *)method {
     NSParameterAssert(method);
 
-    SLRESTContractItem *item = (SLRESTContractItem *)self.dict[method];
-
-    return item ? item.verb : @"POST";
+    SLRESTContractItem *item = self.dict[method];
+    return item.verb ? : @"POST";
 }
 
 - (BOOL)multipartForMethod:(NSString *)method
 {
     NSParameterAssert(method);
     
-    SLRESTContractItem *item = (SLRESTContractItem *)self.dict[method];
-    
+    SLRESTContractItem *item = self.dict[method];
     return item.multipart;
 }
 
@@ -167,9 +165,8 @@ NSString *SLRESTContractDefaultVerb = @"POST";
 - (NSString *)patternForMethod:(NSString *)method {
     NSParameterAssert(method);
 
-    SLRESTContractItem *item = (SLRESTContractItem *)self.dict[method];
-
-    return item ? item.pattern : nil;
+    SLRESTContractItem *item = self.dict[method];
+    return item.pattern;
 }
 
 - (NSString *)urlWithPattern:(NSString *)pattern

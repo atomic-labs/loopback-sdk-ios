@@ -79,12 +79,6 @@ extern NSString *SLRESTContractDefaultVerb;
 @interface SLRESTContract : NSObject
 
 /**
- * A read-only representation of the internal contract. Used for
- * SLRESTContract::addItemsFromContract:.
- */
-@property (readonly, nonatomic) NSDictionary *dict;
-
-/**
  * Returns a new, empty contract.
  *
  * @return A new, empty contract.
