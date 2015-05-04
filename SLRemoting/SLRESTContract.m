@@ -177,13 +177,18 @@ NSString *SLRESTContractDefaultVerb = @"POST";
         return pattern;
     }
 
-    NSString __block *url = pattern;
+    NSArray *pathComponents = pattern.pathComponents;
+    NSMutableArray *parameterizedComponents = [NSMutableArray arrayWithCapacity:pathComponents.count];
 
-    [parameters enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        url = [url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@":%@", key] withString:[NSString stringWithFormat:@"%@", obj]];
-    }];
+    for (NSString *component in pathComponents) {
+        NSString *parameterValue;
+        if ([component hasPrefix:@":"]) {
+            parameterValue = [parameters[[component substringFromIndex:1]] description];
+        }
+        [parameterizedComponents addObject:(parameterValue ? : component)];
+    }
 
-    return url;
+    return [NSString pathWithComponents:parameterizedComponents];
 }
 
 @end

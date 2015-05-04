@@ -16,7 +16,6 @@ static NSString * const SERVER_URL = @"http://localhost:3001";
 
 @interface SLRESTContractTests() {
     SLRESTAdapter *adapter;
-    SLRESTContract *contract;
     SLRepository *TestClass;
 }
 
@@ -55,6 +54,18 @@ static NSString * const SERVER_URL = @"http://localhost:3001";
     STAssertTrue([[parent verbForMethod:@"test.route"] isEqualToString:@"GET"], @"Wrong verb.");
     STAssertTrue([[parent urlForMethod:@"new.route" parameters:@{}] isEqualToString:@"/new/route"], @"Wrong URL.");
     STAssertTrue([[parent verbForMethod:@"new.route"] isEqualToString:@"POST"], @"Wrong verb.");
+}
+
+- (void)testPatternSubstitution {
+    SLRESTContract *contract = [SLRESTContract contract];
+
+    [contract addItem:[SLRESTContractItem itemWithPattern:@"/:namespace/:name" verb:@"GET"] forMethod:@"test.route"];
+    [contract addItem:[SLRESTContractItem itemWithPattern:@"/ideas/:idea/:id" verb:@"GET"] forMethod:@"getIdea"];
+    [contract addItem:[SLRESTContractItem itemWithPattern:@"/:identifier/:id" verb:@"GET"] forMethod:@"ident"];
+
+    STAssertEqualObjects([contract urlForMethod:@"test.route" parameters:(@{@"namespace": @"root", @"name": @"foo"})], @"/root/foo", @"Wrong URL.");
+    STAssertEqualObjects([contract urlForMethod:@"getIdea" parameters:(@{@"idea": @"cloud", @"id": @(1)})], @"/ideas/cloud/1", @"Wrong URL.");
+    STAssertEqualObjects([contract urlForMethod:@"ident" parameters:(@{@"identifier": @"top", @"id": @(2)})], @"/top/2", @"Wrong URL.");
 }
 
 - (void)testGet {
