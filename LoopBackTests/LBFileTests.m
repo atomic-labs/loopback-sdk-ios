@@ -68,7 +68,7 @@
     [contents writeToFile:fullPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     
     ASYNC_TEST_START
-    LBFile __block *file = [self.repository createFileWithName:fileName localPath:tmpDir container:@"container1"];
+    LBFile *file = [self.repository createFileWithName:fileName localPath:tmpDir container:@"container1"];
     [file uploadWithSuccess:^(void) {
         ASYNC_TEST_SIGNAL
     } failure:ASYNC_TEST_FAILURE_BLOCK];

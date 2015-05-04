@@ -130,7 +130,7 @@
 }
 
 - (void)testBinaryPayloadStatic {
-    __block NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
+    NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
 
     ASYNC_TEST_START
     [adapter invokeStaticMethod:@"SimpleClass.binary"
@@ -149,7 +149,7 @@
 }
 
 - (void)testBinaryPayload {
-    __block NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
+    NSOutputStream *outputStream = [NSOutputStream outputStreamToMemory];
 
     ASYNC_TEST_START
     [adapter invokeInstanceMethod:@"SimpleClass.prototype.binary"

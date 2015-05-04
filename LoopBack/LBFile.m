@@ -34,10 +34,10 @@ static NSString *mimeTypeForFileName(NSString *fileName) {
                                                                                 error:NULL];
     NSInteger length = attributes.fileSize;
 
-    __block SLStreamParam *streamParam = [SLStreamParam streamParamWithInputStream:inputStream
-                                                                          fileName:self.name
-                                                                       contentType:mimeType
-                                                                            length:length];
+    SLStreamParam *streamParam = [SLStreamParam streamParamWithInputStream:inputStream
+                                                                  fileName:self.name
+                                                               contentType:mimeType
+                                                                    length:length];
 
    [self invokeMethod:@"upload"
            parameters:@{@"container": self.container,
@@ -52,8 +52,8 @@ static NSString *mimeTypeForFileName(NSString *fileName) {
 - (void)downloadWithSuccess:(LBFileDownloadSuccessBlock)success
                     failure:(SLFailureBlock)failure {
     NSString *fullLocalPath = [self.localPath stringByAppendingPathComponent:self.name];
-    __block NSOutputStream *outputStream = [NSOutputStream outputStreamToFileAtPath:fullLocalPath
-                                                                             append:NO];
+     NSOutputStream *outputStream = [NSOutputStream outputStreamToFileAtPath:fullLocalPath
+                                                                      append:NO];
     
     [self invokeMethod:@"download"
             parameters:@{@"container": self.container,

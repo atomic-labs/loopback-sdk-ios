@@ -95,7 +95,7 @@ typedef void (^GivenCustomerSuccessBlock)(Customer *customer);
     double uid = [[NSDate date] timeIntervalSince1970];
     NSString *userEmail = [NSString stringWithFormat:@"%f%@", uid, USER_EMAIL_DOMAIN];
 
-    Customer __block *customer = (Customer*)[self.repository createUserWithEmail:userEmail
+    Customer *customer = (Customer*)[self.repository createUserWithEmail:userEmail
                                                                         password:USER_PASSWORD];
     STAssertNil(customer._id, @"User id should be nil before save");
 
@@ -229,7 +229,7 @@ typedef void (^GivenCustomerSuccessBlock)(Customer *customer);
     double uid = [[NSDate date] timeIntervalSince1970];
     NSString *email = [NSString stringWithFormat:@"%f-%d%@", uid, ++counter, USER_EMAIL_DOMAIN];
 
-    Customer __block *user = (Customer*)[self.repository createUserWithEmail:email password:USER_PASSWORD];
+    Customer *user = (Customer*)[self.repository createUserWithEmail:email password:USER_PASSWORD];
     [user saveWithSuccess:^{
         success(user);
     } failure:^(NSError *error) {

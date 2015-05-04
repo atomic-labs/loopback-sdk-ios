@@ -68,7 +68,7 @@
 
 - (void)testCreate {
     ASYNC_TEST_START
-    LBContainer __block *container = [self.repository createContainerWithName:@"containerTest"];
+    LBContainer *container = [self.repository createContainerWithName:@"containerTest"];
     [container saveWithSuccess:^{
         ASYNC_TEST_SIGNAL
     } failure:ASYNC_TEST_FAILURE_BLOCK];

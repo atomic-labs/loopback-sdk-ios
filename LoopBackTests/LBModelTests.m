@@ -47,7 +47,7 @@ static NSNumber *lastId;
 }
 
 - (void)testCreate {
-    LBModel __block *model = [self.repository modelWithDictionary:@{ @"name": @"Foobar", @"bars": @1 }];
+    LBModel *model = [self.repository modelWithDictionary:@{ @"name": @"Foobar", @"bars": @1 }];
 
     STAssertEqualObjects(@"Foobar", model[@"name"], @"Invalid name.");
     STAssertEqualObjects(@1, model[@"bars"], @"Invalid bars.");
