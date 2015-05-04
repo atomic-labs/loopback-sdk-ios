@@ -62,7 +62,7 @@
  * Blocks of this type are executed when LBModel::saveWithSuccess:failure: is
  * successful.
  */
-typedef void (^LBModelSaveSuccessBlock)();
+typedef void (^LBModelSaveSuccessBlock)(void);
 /**
  * Saves the LBModel to the server.
  *
@@ -78,7 +78,7 @@ typedef void (^LBModelSaveSuccessBlock)();
  * Blocks of this type are executed when LBModel::destroyWithSuccess:failure: is
  * successful.
  */
-typedef void (^LBModelDestroySuccessBlock)();
+typedef void (^LBModelDestroySuccessBlock)(void);
 /**
  * Destroys the LBModel from the server.
  *

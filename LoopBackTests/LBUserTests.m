@@ -153,7 +153,7 @@ typedef void (^GivenCustomerSuccessBlock)(Customer *customer);
         [self.repository logoutWithSuccess:^(void) {
             STAssertNil(self.repository.currentUserId, @"Invalid current user ID");
             // The following second try to logout should fail if the first logout succeeded
-            [self.repository logoutWithSuccess:ASYNC_TEST_FAILURE_BLOCK
+            [self.repository logoutWithSuccess:^{ ASYNC_TEST_FAILURE_BLOCK(nil); }
                                        failure:^(NSError *error) {
                                            ASYNC_TEST_SIGNAL
                                        }];

@@ -21,7 +21,7 @@
  * Blocks of this type are executed when
  * LBContainer:uploadWithSuccess:failure: is successful.
  */
-typedef void (^LBContainerDeleteSuccessBlock)();
+typedef void (^LBContainerDeleteSuccessBlock)(void);
 /**
  * Deletes the container on the server.
  *

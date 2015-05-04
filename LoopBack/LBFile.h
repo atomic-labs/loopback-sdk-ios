@@ -21,7 +21,7 @@
  * Blocks of this type are executed when
  * LBFile:uploadWithSuccess:failure: is successful.
  */
-typedef void (^LBFileUploadSuccessBlock)();
+typedef void (^LBFileUploadSuccessBlock)(void);
 /**
  * Uploads the file to the server.
  *
@@ -35,7 +35,7 @@ typedef void (^LBFileUploadSuccessBlock)();
  * Blocks of this type are executed when
  * LBFile:downloadWithSuccess:failure: is successful.
  */
-typedef void (^LBFileDownloadSuccessBlock)();
+typedef void (^LBFileDownloadSuccessBlock)(void);
 /**
  * Downloads the file from the server.
  *

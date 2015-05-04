@@ -110,7 +110,7 @@ typedef void (^LBUserFindUserSuccessBlock)(LBUser *user);
  * Blocks of this type are executed when LBUserRepository::logoutWithSuccess:success:failure: is
  * successful.
  */
-typedef void (^LBUserLogoutSuccessBlock)();
+typedef void (^LBUserLogoutSuccessBlock)(void);
 /**
  * Clears the current access token for this session.
  *
